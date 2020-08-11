@@ -86,22 +86,17 @@ def ans():
     ans = False
   return ans
   
-def dummy_m(size):
-  if size>0:
-    mental = np.zeros(size)
-    delta_m = np.random.rand(size-1)
-    m_0 = np.random.rand(1)
-    mental[0] = m_0
-    for i in range(1,size):
-      mental[i] = mental[i-1] + delta_m[i-1]
-  else:
-    mental = None
-  return mental
+def ret_dummy_m(present_m):
+  delta_m = np.random.rand()*2.0-1.0
+  return present_m + delta_m
 
 def main():
   factor_class = Factor_cal(TIME_LENGTH)
+  m_0 = 3.0
   for t in range(TIME_LENGTH):
     factor_class.get_ans(t,ans())
+    m_0=ret_dummy_m(m_0)
+    print('dummy mental',m_0)
     print('factor of quizz',factor_class.ret_factor(t))
   
 
