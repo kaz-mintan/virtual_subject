@@ -21,8 +21,16 @@ class Factor_cal:
     self.lose_count = 0
     self.action_history=np.zeros((time_length,TYPE_OF_ACTION))
 
-  def calc_rate_action():
-    return some
+  def calc_rate_action(self,t):
+    array = np.zeros(5)
+
+    if t>5:
+      for a_i in range(TYPE_OF_ACTION):
+        array[a_i] = np.sum(self.action_history[t-5:t,a_i])/5.0
+    else:
+      for a_i in range(TYPE_OF_ACTION):
+        array[a_i] = np.sum(self.action_history[:t,a_i])/float(t+1.0)
+    return array
 
   def calc_rate(self,t):
     if t==0:
@@ -54,6 +62,7 @@ class Factor_cal:
   def get_ans(self,t,ans):
     self.history[t] = ans
     action = output_robot('ran',TYPE_OF_ACTION)
+    self.action_history[t,int(action)] +=1
     self.calc_rate(t)
     self.calc_point(t)
 
@@ -61,6 +70,7 @@ class Factor_cal:
     factor = np.zeros(FACTOR_SIZE)
     factor[0] = t/80.0
     factor[1] = self.rate[t]
+    factor[2:7] = self.calc_rate_action(t)
     factor[7] = self.point
     factor[8] = self.win_count/270.0
     factor[9] = self.lose_count/270.0
