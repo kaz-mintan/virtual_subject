@@ -30,7 +30,7 @@ def sig(factor,a,b,c):
 
 def gauss(factor,a,b,c):
   ret=0.0
-  ret = np.exp(-1.0*np.power((a*factor-b),2.0)/c)
+  ret = np.exp(-1.0*np.power((a*factor-b),2.0)/(c+0.01))
   return ret
 
 def inv_down(factor,a,b):
@@ -39,7 +39,7 @@ def inv_down(factor,a,b):
   B = A - 1.0
   C = b * factor + 1
   D = np.power(C,a)
-  ret = A/(B*D) - 1.0/B
+  ret = A/(B*D+0.01) - 1.0/(B+0.01)
   return ret
 
 def inv_up(factor,a,b):
@@ -48,7 +48,7 @@ def inv_up(factor,a,b):
   B = A - 1.0
   C = b * factor + 1
   D = np.power(C,a)
-  ret = (D-1.0)/B
+  ret = (D-1.0)/(B+0.01)
   return ret
 
 func_name_str = ["time of trial hap","time of trial sup", "time of trial ang", "time of trial sad",
