@@ -18,7 +18,7 @@ def fact2face(factor, weight, mental):
   for s_i in range(TYPE_OF_FACE):
     for f_i in range(factor.shape[0]):
         i = 4*s_i + f_i
-        face_out[s_i]+= func(inv_norm(i,factor[f_i]/100.0),mental,i)
+        face_out[s_i]+= weight[s_i,f_i]*func(inv_norm(i,factor[f_i]),mental,i)
   return face_out
 
 if __name__ == "__main__": 
