@@ -5,6 +5,7 @@ import numpy as np
 from numpy.random import *
 
 from robot_behavior import output_robot
+from face_out import fact2face
 
 TIME_LENGTH = 30
 FACTOR_SIZE = 10
@@ -71,7 +72,7 @@ class Factor_cal:
     factor[0] = t/80.0
     factor[1] = self.rate[t]
     factor[2:7] = self.calc_rate_action(t)
-    factor[7] = self.point
+    factor[7] = (self.point+80)/320.0
     factor[8] = self.win_count/270.0
     factor[9] = self.lose_count/270.0
     return factor
@@ -93,11 +94,15 @@ def ret_dummy_m(present_m):
 def main():
   factor_class = Factor_cal(TIME_LENGTH)
   m_0 = 3.0
+  weight = np.loadtxt('weight.csv',delimiter=",")
   for t in range(TIME_LENGTH):
     factor_class.get_ans(t,ans())
     m_0=ret_dummy_m(m_0)
     print('dummy mental',m_0)
     print('factor of quizz',factor_class.ret_factor(t))
+    factor = factor_class.ret_factor(t)
+    print(fact2face(factor,weight,m_0/10.0))
+
   
 
 if __name__ == "__main__": 
