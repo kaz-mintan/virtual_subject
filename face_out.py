@@ -14,7 +14,7 @@ def fact2face(factor, weight, mental):
     print('check the shapae of the weight')
     return None
 
-  face_out = np.zeros((TYPE_OF_FACE,factor.shape[0]))
+  face_out = np.zeros(TYPE_OF_FACE)
   for s_i in range(TYPE_OF_FACE):
     for f_i in range(factor.shape[0]):
         i = 4*s_i + f_i
