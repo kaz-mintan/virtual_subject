@@ -6,11 +6,13 @@ from numpy.random import *
 
 from robot_behavior import output_robot
 from face_out import fact2face
+from mental_out import *
 
 TIME_LENGTH = 30
 FACTOR_SIZE = 10
 
 TYPE_OF_ACTION = 5
+TYPE_OF_FACE = 4
 
 class Factor_cal:
   def __init__(self,time_length):
@@ -87,23 +89,31 @@ def ans():
     ans = False
   return ans
   
-def ret_dummy_m(present_m):
-  delta_m = np.random.rand()*2.0-1.0
-  return present_m + delta_m
-
 def main():
+
   factor_class = Factor_cal(TIME_LENGTH)
   m_0 = 3.0
+
+  virtual_factor = np.zeros((TIME_LENGTH,FACTOR_SIZE))
+  virtual_mental = np.zeros(TIME_LENGTH+1)
+  virtual_face = np.zeros((TIME_LENGTH,TYPE_OF_FACE))
+
+  virtual_mental[0] = m_0
   weight = np.loadtxt('weight.csv',delimiter=",")
+
   for t in range(TIME_LENGTH):
     factor_class.get_ans(t,ans())
-    m_0=ret_dummy_m(m_0)
-    print('dummy mental',m_0)
+    m_0=ret_dummy_m(m_0,'inc')
     print('factor of quizz',factor_class.ret_factor(t))
-    factor = factor_class.ret_factor(t)
-    print(fact2face(factor,weight,m_0/10.0))
+    factor_val = factor_class.ret_factor(t)
+    face_val = fact2face(factor_val,weight,m_0/10.0)
 
-  
+    virtual_factor[t,:] = factor_val
+    virtual_mental[t+1] = m_0
+    virtual_face[t,:] = face_val
+  np.savetxt('./virtual_data/factor.csv',virtual_factor,delimiter=",")
+  np.savetxt('./virtual_data/mental.csv',virtual_mental,delimiter=",")
+  np.savetxt('./virtual_data/face.csv',virtual_face,delimiter=",")
 
 if __name__ == "__main__": 
   main()
