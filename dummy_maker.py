@@ -8,7 +8,7 @@ from robot_behavior import output_robot
 from face_out import fact2face
 from mental_out import *
 
-TIME_LENGTH = 30
+TIME_LENGTH = 100
 FACTOR_SIZE = 10
 
 TYPE_OF_ACTION = 5
@@ -111,9 +111,10 @@ def main():
     virtual_factor[t,:] = factor_val
     virtual_mental[t+1] = m_0
     virtual_face[t,:] = face_val
-  np.savetxt('./virtual_data/factor.csv',virtual_factor,delimiter=",")
-  np.savetxt('./virtual_data/mental.csv',virtual_mental,delimiter=",")
-  np.savetxt('./virtual_data/face.csv',virtual_face,delimiter=",")
+
+  np.savetxt('./virtual_data/factor.csv',virtual_factor,fmt="%.3f",delimiter=",")
+  np.savetxt('./virtual_data/mental.csv',virtual_mental,fmt="%.3f",delimiter=",")
+  np.savetxt('./virtual_data/face.csv',virtual_face,fmt="%.3f",delimiter=",")
 
 if __name__ == "__main__": 
   main()
