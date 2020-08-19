@@ -89,32 +89,46 @@ def ans():
     ans = False
   return ans
   
-def main():
+def main(mode):
 
-  factor_class = Factor_cal(TIME_LENGTH)
-  m_0 = 3.0
-
-  virtual_factor = np.zeros((TIME_LENGTH,FACTOR_SIZE))
-  virtual_mental = np.zeros(TIME_LENGTH+1)
   virtual_face = np.zeros((TIME_LENGTH,TYPE_OF_FACE))
-
-  virtual_mental[0] = m_0
   weight = np.loadtxt('weight.csv',delimiter=",")
 
-  for t in range(TIME_LENGTH):
-    factor_class.get_ans(t,ans())
-    m_0=ret_dummy_m(m_0,'inc')
-    print('factor of quizz',factor_class.ret_factor(t))
-    factor_val = factor_class.ret_factor(t)
-    face_val = fact2face(factor_val,weight,m_0/10.0)
+  if mode=='new':
+    factor_class = Factor_cal(TIME_LENGTH)
+    m_0 = 3.0
 
-    virtual_factor[t,:] = factor_val
-    virtual_mental[t+1] = m_0
-    virtual_face[t,:] = face_val
+    virtual_factor = np.zeros((TIME_LENGTH,FACTOR_SIZE))
+    virtual_mental = np.zeros(TIME_LENGTH+1)
+    virtual_mental[0] = m_0
 
-  np.savetxt('./virtual_data/factor.csv',virtual_factor,fmt="%.3f",delimiter=",")
-  np.savetxt('./virtual_data/mental.csv',virtual_mental,fmt="%.3f",delimiter=",")
+    for t in range(TIME_LENGTH):
+      factor_class.get_ans(t,ans())
+      m_0=ret_dummy_m(m_0,'inc')
+      print('factor of quizz',factor_class.ret_factor(t))
+      factor_val = factor_class.ret_factor(t)
+      face_val = fact2face(factor_val,weight,m_0/10.0)
+
+      virtual_factor[t,:] = factor_val
+      virtual_mental[t+1] = m_0
+      virtual_face[t,:] = face_val
+
+    np.savetxt('./virtual_data/factor.csv',virtual_factor,fmt="%.3f",delimiter=",")
+    np.savetxt('./virtual_data/mental.csv',virtual_mental,fmt="%.3f",delimiter=",")
+
+  elif mode == 'old':
+
+    virtual_factor = np.loadtxt('./virtual_data/factor.csv',delimiter=",")
+    virtual_mental = np.loadtxt('./virtual_data/mental.csv',delimiter=",")
+
+    for t in range(TIME_LENGTH):
+      factor_val = virtual_factor[t]
+      m_0 = virtual_mental[t]
+      face_val = fact2face(factor_val,weight,m_0/10.0)
+
+      virtual_face[t,:] = face_val
+
   np.savetxt('./virtual_data/face.csv',virtual_face,fmt="%.3f",delimiter=",")
 
 if __name__ == "__main__": 
-  main()
+  main('old')
